@@ -1,0 +1,6 @@
+[performance]
+cache_capacity = 40000
+non_editable_directories#0 = /assets
+non_editable_directories#1 = /.internal
+non_editable_directories#2 = /.vscode
+

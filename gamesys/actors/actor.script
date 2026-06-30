@@ -1,0 +1,143 @@
+--- unit vector pointing up
+local UP = vmath.vector3(0, 1, 0)
+
+local ROTATION_FIX = math.rad(90)
+
+local ACT_MOVE_FORWARD  = hash 'move_forward'
+local ACT_MOVE_BACKWARD = hash 'move_backward'
+local ACT_TURN_LEFT = hash 'turn_left'
+local ACT_TURN_RIGHT = hash 'turn_right'
+
+local CAMERA = '/camera#camera'
+
+local window_xsize, window_ysize
+
+go.property('controllable', false)
+go.property('active', false)
+go.property('tune_camera', false)
+
+go.property('acceleration', 256)
+go.property('deceleration', 512)
+go.property('max_speed', 512)
+
+go.property('max_boost', 256)
+go.property('boost_cost', 50)
+
+go.property('rotation_speed', 15.0)
+
+--- Obtains window's X and Y size, and saves them into
+--- `window_xsize` and `window_ysize` variables.
+local function update_window_size()
+	window_xsize, window_ysize = window.get_size()
+end
+
+--- Returns a quaternion for an actor that is faced to a point at coordinates `px` and `py`.
+---@param ax number actor's X position
+---@param ay number actor's Y position
+---@param px number point's X position
+---@param py number point's Y position
+local function get_angle_to(ax, ay, px, py)
+	local x = ax - px
+	local y = py - ay
+	local angle = vmath.quat_rotation_z(math.atan2(x, y) + ROTATION_FIX)
+	--go.set_rotation(angle)
+	return angle
+end
+
+function init(self)
+	self.input_acquired = false
+
+	self.position = vmath.vector3()
+	self.camera_position = vmath.vector3(0, 0, 500)
+	self.rotation = vmath.quat()
+
+	self.speed = 0
+	self.input = 0
+
+	self.boost = self.max_boost
+	self.is_boosting = false
+
+	update_window_size()
+end
+
+function update(self, dt)
+	local accelerating = self.input ~= 0
+
+	if accelerating then
+		self.speed = self.speed + (self.acceleration * dt) * self.input
+		self.speed = vmath.clamp(self.speed, -self.max_speed/2, self.max_speed)
+	elseif math.abs(self.speed) > 0 then
+		-- decrease speed when not accelerating
+
+		if self.speed > 0 then
+			self.speed = self.speed - self.deceleration * dt
+		else
+			self.speed = self.speed + self.deceleration * dt
+		end
+
+		if math.abs(self.speed) < 1 then
+			self.speed = 0
+		end
+	end
+
+	self.input = 0
+
+	if math.abs(self.speed) > 1 then
+		local move_amount = UP * self.speed * dt
+		self.position = self.position + vmath.rotate(self.rotation, move_amount)
+	end
+
+	if self.tune_camera then
+		self.camera_position.x = self.position.x
+		self.camera_position.y = self.position.y
+		go.set_position(self.camera_position, CAMERA)
+	end
+
+	go.set_position(self.position)
+	go.set_rotation(self.rotation)
+
+	self.position.x = go.get('.', 'position.x')
+	self.position.y = go.get('.', 'position.y')
+	self.position.z = go.get('.', 'position.z')
+
+	self.rotation.x = go.get('.', 'rotation.x')
+	self.rotation.y = go.get('.', 'rotation.y')
+	self.rotation.z = go.get('.', 'rotation.z')
+	self.rotation.w = go.get('.', 'rotation.w')
+
+	update_window_size()
+
+	if self.controllable and not self.input_acquired then
+		msg.post('#', 'acquire_input_focus')
+		self.input_acquired = true
+	elseif not self.controllable and self.input_acquired then
+		msg.post('#', 'release_input_focus')
+		self.input_acquired = false
+	end
+end
+
+function on_input(self, action_id, action)
+	-- rotation to mouse position
+
+	local mouse_movement = (not action_id) and action.x and action.y
+	local mouse_x = action.x
+	local mouse_y = action.y
+
+	if mouse_movement then
+		local x = window_xsize/2 - mouse_x
+		local y = window_ysize/2 - mouse_y
+
+		print(window_xsize, window_ysize, mouse_x, mouse_y)
+		local rot = get_angle_to(self.position.x, self.position.y, mouse_x, mouse_y)
+		self.rotation = rot
+	end
+
+
+	if action_id == ACT_MOVE_FORWARD then
+		self.input = 1
+	elseif action_id == ACT_MOVE_BACKWARD then
+		self.input = -1
+	else
+		self.input = 0
+	end
+end

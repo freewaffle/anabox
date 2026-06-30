@@ -1,0 +1,10 @@
+images {
+  image: "/resources/sprites/guard.png"
+}
+images {
+  image: "/resources/sprites/terror.png"
+}
+images {
+  image: "/resources/sprites/bullet.png"
+}
+extrude_borders: 2

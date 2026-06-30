@@ -1,0 +1,24 @@
+key_trigger {
+  input: KEY_F2
+  action: "toggle_profiler"
+}
+key_trigger {
+  input: KEY_W
+  action: "move_forward"
+}
+key_trigger {
+  input: KEY_S
+  action: "move_backward"
+}
+key_trigger {
+  input: KEY_A
+  action: "turn_left"
+}
+key_trigger {
+  input: KEY_D
+  action: "turn_right"
+}
+mouse_trigger {
+  input: MOUSE_BUTTON_LEFT
+  action: "touch"
+}
