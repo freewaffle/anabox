@@ -1,8 +1,6 @@
 --- unit vector pointing up
 local UP = vmath.vector3(0, 1, 0)
 
-local ROTATION_FIX = math.rad(90)
-
 local ACT_MOVE_FORWARD  = hash 'move_forward'
 local ACT_MOVE_BACKWARD = hash 'move_backward'
 local ACT_TURN_LEFT = hash 'turn_left'
