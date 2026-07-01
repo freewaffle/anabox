@@ -6,6 +6,8 @@ local ACT_MOVE_BACKWARD = hash 'move_backward'
 local ACT_TURN_LEFT = hash 'turn_left'
 local ACT_TURN_RIGHT = hash 'turn_right'
 
+local ACT_OVERVIEW = hash 'overview'
+
 local CAMERA = '/camera#camera'
 
 go.property('controllable', false)
@@ -98,7 +100,7 @@ function update(self, dt)
 	end
 end
 
-function on_input(self, action_id)
+function on_input(self, action_id, action)
 	if action_id == ACT_MOVE_FORWARD then
 		self.input.y = 1
 	elseif action_id == ACT_MOVE_BACKWARD then
@@ -111,5 +113,17 @@ function on_input(self, action_id)
 		self.input.x = 1
 	elseif action_id == ACT_TURN_RIGHT then
 		self.input.x = -1
+	end
+
+	if action_id == ACT_OVERVIEW then
+		local zoom = 0.35
+		if action.released then
+			zoom = 1.5
+		end
+		
+		--camera.set_orthographic_zoom(CAMERA, zoom)
+		if action.pressed or action.released then
+			go.animate(CAMERA, 'orthographic_zoom', go.PLAYBACK_ONCE_FORWARD, zoom, go.EASING_OUTEXPO, 1, 0, nil)
+		end
 	end
 end

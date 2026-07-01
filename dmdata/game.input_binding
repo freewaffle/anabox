@@ -18,6 +18,10 @@ key_trigger {
   input: KEY_D
   action: "turn_right"
 }
+key_trigger {
+  input: KEY_C
+  action: "overview"
+}
 mouse_trigger {
   input: MOUSE_BUTTON_LEFT
   action: "touch"
