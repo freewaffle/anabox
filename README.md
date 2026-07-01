@@ -6,7 +6,6 @@ Anabox is a top-down 2D shooter game with focus on chaos and destruction.
 
 The game is split into these directories:
 
-- `assets` folder contains project files (GIMP, Audacity, etc.) for most assets.
 - `components` folder contains important game's components.
 - `dmdata` folder contains files and manifests neccesary for proper building and game work.
 - `gamesys` folder contains the engine that powers all Anabox levels, built with Defold components.
