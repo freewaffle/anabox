@@ -130491,8 +130491,4 @@ layers {
     tile: 80
   }
 }
-layers {
-  id: "temp"
-  z: 1.0
-}
 material: "/builtins/materials/tile_map.material"
