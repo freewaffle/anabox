@@ -1,0 +1,14 @@
+local ACT_TOGGLE_PROFILER = hash 'toggle_profiler'
+local profiler_enabled = false
+
+function init()
+	msg.post('#', 'acquire_input_focus')
+end
+
+function on_input(self, action_id, action)
+	if action_id == ACT_TOGGLE_PROFILER and action.pressed then
+		profiler_enabled = not profiler_enabled
+		print(profiler_enabled and 'showing' or 'hiding', ' profiler')
+		profiler.enable_ui(profiler_enabled)
+	end
+end
