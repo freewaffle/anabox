@@ -20,6 +20,10 @@ embedded_instances {
   "  id: \"profiler\"\n"
   "  component: \"/gamesys/profiler.script\"\n"
   "}\n"
+  "components {\n"
+  "  id: \"env\"\n"
+  "  component: \"/gamesys/env.script\"\n"
+  "}\n"
   ""
 }
 embedded_instances {

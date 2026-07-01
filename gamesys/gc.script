@@ -7,14 +7,7 @@ local memory_debug_text = {
 	color = vmath.vector4(1, 1, 1, 1)
 }
 
-local TERROR_FACTORY = 'gamesys:/factories#terror'
-
 function init(self)
-	factory.create(TERROR_FACTORY, vmath.vector3(), vmath.quat(), {
-		controllable = true,
-		tune_camera  = true,
-	}, nil)
-
 	if DEBUG_MEMORY then
 		timer.delay(0.5, true, function ()
 			memory_debug_text.text = string.format("memory in use: %.2f KB", collectgarbage("count"))
