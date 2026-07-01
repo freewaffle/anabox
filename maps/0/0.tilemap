@@ -130491,4 +130491,13 @@ layers {
     tile: 80
   }
 }
+layers {
+  id: "tags"
+  z: 1.0
+  cell {
+    x: 118
+    y: 34
+    tile: 88
+  }
+}
 material: "/builtins/materials/tile_map.material"
