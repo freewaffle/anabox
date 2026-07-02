@@ -16,8 +16,8 @@ embedded_components {
     z: 1.0
   }
   scale {
-    x: 0.5
-    y: 0.5
+    x: 0.25
+    y: 0.25
   }
 }
 embedded_components {
@@ -40,8 +40,8 @@ embedded_components {
   "    count: 3\n"
   "    id: \"box\"\n"
   "  }\n"
-  "  data: 25.0\n"
-  "  data: 16.25\n"
+  "  data: 12.5\n"
+  "  data: 8.125\n"
   "  data: 10.0\n"
   "}\n"
   "event_contact: false\n"
