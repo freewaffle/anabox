@@ -102,7 +102,10 @@ local TILES = {
 
 	TAGS = {
 		PLAYER_SPAWN = 73,
-	}
+	},
+
+	X_SIZE = 64,
+	Y_SIZE = 64,
 }
 
 return TILES
