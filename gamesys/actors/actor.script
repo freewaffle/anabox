@@ -14,9 +14,9 @@ go.property('controllable', false)
 go.property('active', false)
 go.property('tune_camera', false)
 
-go.property('acceleration', 256)
-go.property('deceleration', 512)
-go.property('max_speed', 512)
+go.property('acceleration', 128)
+go.property('deceleration', 256)
+go.property('max_speed', 256)
 
 go.property('max_boost', 256)
 go.property('boost_cost', 50)
@@ -26,9 +26,9 @@ go.property('rotation_speed', 180)
 function init(self)
 	self.input_acquired = false
 
-	self.position = vmath.vector3()
-	self.camera_position = vmath.vector3(0, 0, 500)
-	self.rotation = vmath.quat()
+	self.position = go.get_position()
+	self.camera_position = go.get_position(CAMERA)
+	self.rotation = go.get_rotation()
 
 	self.speed = 0
 	self.input = vmath.vector3()
