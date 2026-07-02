@@ -101,7 +101,7 @@ local TILES = {
 	},
 
 	TAGS = {
-		PLAYER_SPAWN = 89,
+		PLAYER_SPAWN = 73,
 	}
 }
 
