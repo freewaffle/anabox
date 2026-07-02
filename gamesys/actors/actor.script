@@ -27,8 +27,9 @@ function init(self)
 	self.input_acquired = false
 
 	self.position = go.get_position()
-	self.camera_position = go.get_position(CAMERA)
 	self.rotation = go.get_rotation()
+	self.camera_position = go.get_position(CAMERA)
+	self.camera_initial_zoom = camera.get_orthographic_zoom(CAMERA)
 
 	self.speed = 0
 	self.input = vmath.vector3()
@@ -118,7 +119,7 @@ function on_input(self, action_id, action)
 	if action_id == ACT_OVERVIEW then
 		local zoom = 0.35
 		if action.released then
-			zoom = 1.5
+			zoom = self.camera_initial_zoom
 		end
 		
 		--camera.set_orthographic_zoom(CAMERA, zoom)
