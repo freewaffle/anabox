@@ -9,6 +9,7 @@ local ACT_TURN_RIGHT = hash 'turn_right'
 local ACT_OVERVIEW = hash 'overview'
 
 local CAMERA = '/camera#camera'
+local COLLISION_OBJ = '#colobj'
 
 go.property('controllable', false)
 go.property('active', false)
@@ -36,6 +37,15 @@ function init(self)
 
 	self.boost = self.max_boost
 	self.is_boosting = false
+
+	do
+		local body = b2d.get_body(COLLISION_OBJ)
+		if body then
+			self.b2d_body = body
+		else
+			error("failed to get Box2D body", 0)
+		end
+	end
 end
 
 function update(self, dt)
@@ -43,10 +53,10 @@ function update(self, dt)
 	self.position.y = go.get('.', 'position.y')
 	self.position.z = go.get('.', 'position.z')
 
-	self.rotation.x = go.get('.', 'rotation.x')
-	self.rotation.y = go.get('.', 'rotation.y')
-	self.rotation.z = go.get('.', 'rotation.z')
-	self.rotation.w = go.get('.', 'rotation.w')
+	-- self.rotation.x = go.get('.', 'rotation.x')
+	-- self.rotation.y = go.get('.', 'rotation.y')
+	-- self.rotation.z = go.get('.', 'rotation.z')
+	-- self.rotation.w = go.get('.', 'rotation.w')
 	
 	local accelerating = self.input.y ~= 0
 	local rotating = self.input.x ~= 0
@@ -83,14 +93,41 @@ function update(self, dt)
 		self.position = self.position + vmath.rotate(self.rotation, move_amount)
 	end
 
+	-- linear velocity
+	do
+		local velocity = b2d.body.get_linear_velocity(self.b2d_body)
+		velocity.x = velocity.x * 0.9
+		velocity.y = velocity.y * 0.9
+		b2d.body.set_linear_velocity(self.b2d_body, velocity)
+
+		-- this doesn't trigger GC, but crashes the engine:
+		--[[
+		local vel_x = go.get(COLLISION_OBJ, 'linear_velocity.x')
+		local vel_y = go.get(COLLISION_OBJ, 'linear_velocity.y')
+
+		vel_x = vel_x * 0.5
+		vel_y = vel_y * 0.5
+
+		go.set(COLLISION_OBJ, 'linear_velocity.x', vel_x)
+		go.set(COLLISION_OBJ, 'linear_velocity.y', vel_y)
+		]]
+	end
+
+	-- angular velocity
+	do
+		local velocity = b2d.body.get_angular_velocity(self.b2d_body)
+		velocity = velocity * 0.5
+		b2d.body.set_angular_velocity(self.b2d_body, velocity)
+	end
+
+	go.set_position(self.position)
+	go.set_rotation(self.rotation)
+
 	if self.tune_camera then
 		self.camera_position.x = self.position.x
 		self.camera_position.y = self.position.y
 		go.set_position(self.camera_position, CAMERA)
 	end
-
-	go.set_position(self.position)
-	go.set_rotation(self.rotation)
 
 	if self.controllable and not self.input_acquired then
 		msg.post('#', 'acquire_input_focus')
