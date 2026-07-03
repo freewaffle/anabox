@@ -11,6 +11,10 @@ local ACT_OVERVIEW = hash 'overview'
 local CAMERA = '/camera#camera'
 local COLLISION_OBJ = '#colobj'
 
+local MAP = '/map#tilemap'
+local MAP_XSIZE, MAP_YSIZE
+local TILES = require 'modules.tiles'
+
 go.property('controllable', false)
 go.property('active', false)
 go.property('tune_camera', false)
@@ -46,6 +50,10 @@ function init(self)
 			error("failed to get Box2D body", 0)
 		end
 	end
+	
+	local _, _, xsize, ysize = tilemap.get_bounds(MAP)
+	MAP_XSIZE = TILES.X_SIZE * xsize
+	MAP_YSIZE = TILES.Y_SIZE * ysize
 end
 
 function update(self, dt)
@@ -120,6 +128,9 @@ function update(self, dt)
 		b2d.body.set_angular_velocity(self.b2d_body, velocity)
 	end
 
+	self.position.x = vmath.clamp(self.position.x, 0, MAP_XSIZE)
+	self.position.y = vmath.clamp(self.position.y, 0, MAP_YSIZE)
+
 	go.set_position(self.position)
 	go.set_rotation(self.rotation)
 
@@ -154,7 +165,7 @@ function on_input(self, action_id, action)
 	end
 
 	if action_id == ACT_OVERVIEW then
-		local zoom = 0.35
+		local zoom = 0.5
 		if action.released then
 			zoom = self.camera_initial_zoom
 		end
