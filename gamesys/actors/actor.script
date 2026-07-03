@@ -16,7 +16,7 @@ go.property('tune_camera', false)
 
 go.property('acceleration', 128)
 go.property('deceleration', 256)
-go.property('max_speed', 256)
+go.property('max_speed', 128)
 
 go.property('max_boost', 256)
 go.property('boost_cost', 50)
