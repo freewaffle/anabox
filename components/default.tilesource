@@ -285,12 +285,12 @@ convex_hulls {
 convex_hulls {
   index: 230
   count: 4
-  collision_group: "breakable_walls"
+  collision_group: "fence"
 }
 convex_hulls {
   index: 234
   count: 4
-  collision_group: "breakable_walls"
+  collision_group: "fence"
 }
 convex_hulls {
   index: 238
@@ -402,6 +402,6 @@ convex_hulls {
   count: 0
   collision_group: ""
 }
-collision_groups: "breakable_walls"
+collision_groups: "fence"
 collision_groups: "walls"
 extrude_borders: 2
