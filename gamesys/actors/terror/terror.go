@@ -2,6 +2,10 @@ components {
   id: "script"
   component: "/gamesys/actors/actor.script"
 }
+components {
+  id: "colobj"
+  component: "/gamesys/actors/actor.collisionobject"
+}
 embedded_components {
   id: "sprite"
   type: "sprite"
@@ -19,32 +23,4 @@ embedded_components {
     x: 0.25
     y: 0.25
   }
-}
-embedded_components {
-  id: "colobj"
-  type: "collisionobject"
-  data: "type: COLLISION_OBJECT_TYPE_DYNAMIC\n"
-  "mass: 1.0\n"
-  "friction: 0.1\n"
-  "restitution: 0.5\n"
-  "group: \"actors\"\n"
-  "mask: \"actors\"\n"
-  "embedded_collision_shape {\n"
-  "  shapes {\n"
-  "    shape_type: TYPE_BOX\n"
-  "    position {\n"
-  "    }\n"
-  "    rotation {\n"
-  "    }\n"
-  "    index: 0\n"
-  "    count: 3\n"
-  "    id: \"box\"\n"
-  "  }\n"
-  "  data: 12.5\n"
-  "  data: 8.125\n"
-  "  data: 10.0\n"
-  "}\n"
-  "event_contact: false\n"
-  "event_trigger: false\n"
-  ""
 }

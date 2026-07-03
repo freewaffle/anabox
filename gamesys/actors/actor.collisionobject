@@ -1,0 +1,26 @@
+type: COLLISION_OBJECT_TYPE_DYNAMIC
+mass: 1.0
+friction: 0.1
+restitution: 0.5
+group: "moveable"
+mask: "moveable"
+mask: "static"
+mask: "walls"
+mask: "fence"
+embedded_collision_shape {
+  shapes {
+    shape_type: TYPE_BOX
+    position {
+    }
+    rotation {
+    }
+    index: 0
+    count: 3
+    id: "box"
+  }
+  data: 12.5
+  data: 8.125
+  data: 10.0
+}
+event_contact: false
+event_trigger: false
