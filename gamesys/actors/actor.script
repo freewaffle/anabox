@@ -39,6 +39,15 @@ function init(self)
 end
 
 function update(self, dt)
+	self.position.x = go.get('.', 'position.x')
+	self.position.y = go.get('.', 'position.y')
+	self.position.z = go.get('.', 'position.z')
+
+	self.rotation.x = go.get('.', 'rotation.x')
+	self.rotation.y = go.get('.', 'rotation.y')
+	self.rotation.z = go.get('.', 'rotation.z')
+	self.rotation.w = go.get('.', 'rotation.w')
+	
 	local accelerating = self.input.y ~= 0
 	local rotating = self.input.x ~= 0
 
@@ -82,15 +91,6 @@ function update(self, dt)
 
 	go.set_position(self.position)
 	go.set_rotation(self.rotation)
-
-	self.position.x = go.get('.', 'position.x')
-	self.position.y = go.get('.', 'position.y')
-	self.position.z = go.get('.', 'position.z')
-
-	self.rotation.x = go.get('.', 'rotation.x')
-	self.rotation.y = go.get('.', 'rotation.y')
-	self.rotation.z = go.get('.', 'rotation.z')
-	self.rotation.w = go.get('.', 'rotation.w')
 
 	if self.controllable and not self.input_acquired then
 		msg.post('#', 'acquire_input_focus')
