@@ -1,6 +1,6 @@
 local TILES = {
 	ASPHALT = {
-		1, 45, 46, 47, 48
+		1, 45, 46, 47, 32
 	},
 
 	WATER = 11,
