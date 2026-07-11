@@ -11,6 +11,7 @@ local ACT_OVERVIEW = hash 'overview'
 local ACT_MOUSE_LEFT = hash 'mouse_left'
 
 local CAMERA = '/camera#camera'
+
 local COLLISION_OBJ = '#colobj'
 
 local MAP = '/map#tilemap'
@@ -33,7 +34,9 @@ local SL_MODES = {
 }
 
 local SL_UNLOCKER = function(self)
-	self.sl = SL_MODES.UNLOCKED
+	if self.sl == SL_MODES.LOCKED then
+		self.sl = SL_MODES.UNLOCKED
+	end
 end
 
 go.property('controllable', false)
@@ -48,6 +51,12 @@ go.property('max_boost', 256)
 go.property('boost_cost', 50)
 
 go.property('rotation_speed', 180)
+
+local function update_map_bounds()
+	local _, _, xsize, ysize = tilemap.get_bounds(MAP)
+	MAP_XSIZE = TILES.X_SIZE * xsize
+	MAP_YSIZE = TILES.Y_SIZE * ysize
+end
 
 function init(self)
 	self.input_acquired = false
@@ -80,10 +89,12 @@ function init(self)
 			error("failed to get Box2D body", 0)
 		end
 	end
-	
-	local _, _, xsize, ysize = tilemap.get_bounds(MAP)
-	MAP_XSIZE = TILES.X_SIZE * xsize
-	MAP_YSIZE = TILES.Y_SIZE * ysize
+
+	update_map_bounds()
+end
+
+function on_reload()
+	update_map_bounds()
 end
 
 function update(self, dt)
@@ -131,24 +142,16 @@ function update(self, dt)
 		self.position = self.position + vmath.rotate(self.rotation, move_amount)
 	end
 
+	if not self.b2d_body then
+		error('nil b2d body', 0)
+	end
+
 	-- linear velocity
 	do
 		local velocity = b2d.body.get_linear_velocity(self.b2d_body)
 		velocity.x = velocity.x * 0.9
 		velocity.y = velocity.y * 0.9
 		b2d.body.set_linear_velocity(self.b2d_body, velocity)
-
-		-- this doesn't trigger GC, but crashes the engine:
-		--[[
-		local vel_x = go.get(COLLISION_OBJ, 'linear_velocity.x')
-		local vel_y = go.get(COLLISION_OBJ, 'linear_velocity.y')
-
-		vel_x = vel_x * 0.5
-		vel_y = vel_y * 0.5
-
-		go.set(COLLISION_OBJ, 'linear_velocity.x', vel_x)
-		go.set(COLLISION_OBJ, 'linear_velocity.y', vel_y)
-		]]
 	end
 
 	-- angular velocity
