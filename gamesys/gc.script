@@ -1,7 +1,7 @@
 -- value of 24 sometimes makes GC aggressive and game lagging,
--- but it's OK most of the time. however, it's set to 16 to
+-- but it's OK most of the time. however, it's set to 12 to
 -- prevent these bad effects, and it feels good for the game.
-local GC_STEP = 16
+local GC_STEP = 12
 local DEBUG_MEMORY = true
 
 local memory_debug_text = {
