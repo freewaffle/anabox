@@ -8,6 +8,12 @@ embedded_instances {
   "  data: \"prototype: \\\"/gamesys/actors/terror/terror.go\\\"\\n"
   "\"\n"
   "}\n"
+  "embedded_components {\n"
+  "  id: \"bullet\"\n"
+  "  type: \"factory\"\n"
+  "  data: \"prototype: \\\"/gamesys/bullet/bullet.go\\\"\\n"
+  "\"\n"
+  "}\n"
   ""
 }
 embedded_instances {

@@ -1,0 +1,27 @@
+local THIS = '.'
+
+local SELF_DESTRUCTOR = function()
+	go.delete(THIS, true)
+end
+
+go.property('flight_speed', 500)
+go.property('lifetime', 1)
+
+function init(self)
+	local up = vmath.vector3(0, self.flight_speed, 0)
+	self.forward = vmath.rotate(go.get_rotation(), up)
+
+	self.position = go.get_position()
+
+	if self.lifetime then
+		timer.delay(self.lifetime, false, SELF_DESTRUCTOR)
+	end
+end
+
+function update(self, dt)
+	self.position = self.position + self.forward * dt
+	go.set_position(self.position)
+
+	self.position.x = go.get(THIS, 'position.x')
+	self.position.y = go.get(THIS, 'position.y')
+end
