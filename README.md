@@ -11,5 +11,5 @@ The game's repo is split into these directories:
 - `gamesys` folder contains the engine that powers all Anabox levels, built with Defold components.
 - `gdata` folder contains files that being read by the game in runtime. They are not using by Defold engine,
 but need for proper game work.
-- `maps` folder obviously contains maps.
+- `maps` folder, obviously, contains maps.
 - `resources` folder contains assets used by the game components.
