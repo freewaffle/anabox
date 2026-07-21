@@ -52,6 +52,18 @@ go.property('boost_cost', 50)
 
 go.property('rotation_speed', 180)
 
+-- test weapon should not be defined in release builds,
+-- as it shadows all others!
+local test_weapon = {
+	reload_time = 0.5,
+	bullet = {
+		flight_speed = 750,
+		lifetime = 1
+	}
+}
+
+local default_weapon = test_weapon
+
 local function update_map_bounds()
 	local _, _, xsize, ysize = tilemap.get_bounds(MAP)
 	MAP_XSIZE = TILES.X_SIZE * xsize
@@ -73,21 +85,14 @@ function init(self)
 	self.is_boosting = false
 
 	self.sl = SL_MODES.UNLOCKED
-	self.weapon = {
-		reload_time = 0.5,
-		bullet = {
-			flight_speed = 250,
-			lifetime = 1
-		}
-	}
+	-- use test weapon if it's defined:
+	self.weapon = test_weapon or default_weapon
 
-	do
-		local body = b2d.get_body(COLLISION_OBJ)
-		if body then
-			self.b2d_body = body
-		else
-			error("failed to get Box2D body", 0)
-		end
+	local body = b2d.get_body(COLLISION_OBJ)
+	if body then
+		self.b2d_body = body
+	else
+		error("failed to get Box2D body", 0)
 	end
 
 	update_map_bounds()
@@ -95,6 +100,11 @@ end
 
 function on_reload()
 	update_map_bounds()
+
+	-- if test weapon defined, let the actor use it:
+	if test_weapon then
+		self.weapon = test_weapon
+	end
 end
 
 function update(self, dt)
