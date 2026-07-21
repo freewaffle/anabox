@@ -1,30 +1,38 @@
--- value of 24 sometimes makes GC aggressive and game lagging,
--- but it's OK most of the time. however, it's set to 12 to
--- prevent these bad effects, and it feels good for the game.
-local GC_STEP = 12
-local DEBUG_MEMORY = true
+local ALLOC_LIMIT = 2 --[[ megabytes ]] * 1024
+local last_alloc = collectgarbage('count')
 
-local memory_debug_text = {
-	text = "memory in use: ...",
-	position = vmath.vector3(50, 50, 0),
-	color = vmath.vector4(1, 1, 1, 1)
+local dbg = {
+	ENABLED = true,
+	
+	label = {
+		text = "memory in use: ...",
+		position = vmath.vector3(50, 50, 0),
+		color = vmath.vector4(1, 1, 1, 1)
+	},
 }
 
-function init(self)
-	if DEBUG_MEMORY then
-		timer.delay(0.5, true, function ()
-			memory_debug_text.text = string.format("memory in use: %.2f KB", collectgarbage("count"))
-		end)
+local DEBUG_UPDATER = function()
+	local current_alloc = collectgarbage('count') - last_alloc
+	dbg.label.text = string.format('memory in use: %d/%d KB', current_alloc, ALLOC_LIMIT)
+end
+
+function init()
+	if dbg.ENABLED then
+		timer.delay(0.1, true, DEBUG_UPDATER)
 	end
 
-	msg.post('#', 'acquire_input_focus')
 	collectgarbage('stop')
-	-- collectgarbage("setstepmul", 50)
-	-- collectgarbage("setpause", 25)
 end
 
 function update()
-	collectgarbage('step', GC_STEP)
+	local current_alloc = collectgarbage('count')
+	if current_alloc - last_alloc >= ALLOC_LIMIT then
+		print('gc: collected garbage')
+		collectgarbage('collect')
+		last_alloc = collectgarbage('count')
+	end
 
-	msg.post('@render:', 'draw_debug_text', memory_debug_text)
+	if dbg.ENABLED then
+		msg.post('@render:', 'draw_debug_text', dbg.label)
+	end
 end
