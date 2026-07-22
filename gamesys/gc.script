@@ -1,37 +1,49 @@
-local ALLOC_LIMIT = 2 --[[ megabytes ]] * 1024
-local last_alloc = collectgarbage('count')
+local PAUSE = 300
+local STEPMUL = 64
 
 local dbg = {
 	ENABLED = true,
 	
 	label = {
-		text = "memory in use: ...",
+		text = 'memory in use: ...',
 		position = vmath.vector3(50, 50, 0),
 		color = vmath.vector4(1, 1, 1, 1)
 	},
+
+	---@type nil|number
+	timer = nil,
 }
 
 local DEBUG_UPDATER = function()
-	local current_alloc = collectgarbage('count') - last_alloc
-	dbg.label.text = string.format('memory in use: %d/%d KB', current_alloc, ALLOC_LIMIT)
+	local current_alloc = collectgarbage('count')
+	dbg.label.text = string.format('memory in use: %d KB', current_alloc)
+end
+
+local function configure_gc()
+	print(string.format('gc: pause = %d; stepmul = %d', PAUSE, STEPMUL))
+	
+	collectgarbage('setpause', PAUSE)
+	collectgarbage('setstepmul', STEPMUL)
 end
 
 function init()
+	print('gc: (re)init')
+	
 	if dbg.ENABLED then
-		timer.delay(0.1, true, DEBUG_UPDATER)
+		local running_timer = dbg.timer
+		if running_timer then
+			timer.cancel(running_timer)
+		end
+		
+		dbg.timer = timer.delay(0.1, true, DEBUG_UPDATER)
 	end
 
-	collectgarbage('stop')
+	configure_gc()
 end
 
-function update()
-	local current_alloc = collectgarbage('count')
-	if current_alloc - last_alloc >= ALLOC_LIMIT then
-		print('gc: collected garbage')
-		collectgarbage('collect')
-		last_alloc = collectgarbage('count')
-	end
+on_reload = init
 
+function update()
 	if dbg.ENABLED then
 		msg.post('@render:', 'draw_debug_text', dbg.label)
 	end
