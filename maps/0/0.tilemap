@@ -111677,14 +111677,12 @@ layers {
   cell {
     x: 33
     y: 111
-    tile: 49
-    v_flip: 1
+    tile: 61
   }
   cell {
     x: 34
     y: 111
     tile: 0
-    v_flip: 1
   }
   cell {
     x: 35
@@ -112628,7 +112626,7 @@ layers {
   cell {
     x: 33
     y: 112
-    tile: 48
+    tile: 61
   }
   cell {
     x: 34
@@ -113549,7 +113547,7 @@ layers {
   cell {
     x: 33
     y: 113
-    tile: 48
+    tile: 61
   }
   cell {
     x: 34
@@ -114509,7 +114507,7 @@ layers {
   cell {
     x: 33
     y: 114
-    tile: 49
+    tile: 61
   }
   cell {
     x: 34
